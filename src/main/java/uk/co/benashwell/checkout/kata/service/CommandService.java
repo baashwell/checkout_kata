@@ -7,10 +7,20 @@ import java.util.stream.Collectors;
 
 import uk.co.benashwell.checkout.kata.exception.InvalidCommandException;
 import uk.co.benashwell.checkout.kata.model.Command;
+import uk.co.benashwell.checkout.kata.model.Product;
 
 public class CommandService {
 
-    private Logger logger = Logger.getLogger(CommandService.class.getName());
+    private ShopService shopService;
+
+    public CommandService() {
+        shopService = new ShopService("default-products.txt");
+    }
+
+    //this constructor will be used for testing to mock the shop service
+    public CommandService(ShopService shopService) {
+        this.shopService = shopService;
+    }
 
     /**
      * Get Command that relates to given command
@@ -36,7 +46,7 @@ public class CommandService {
      * Get a list of all command values
      * @return List of command values
      */
-    public List<String> getListOfCommandValues() {
+    private List<String> getListOfCommandValues() {
         return Arrays.stream(Command.values())
                 .map(Command::getCommandToMatch)
                 .collect(Collectors.toList());
@@ -45,14 +55,34 @@ public class CommandService {
     /**
      * Carry out a given command
      * @param command Command to carry out
+     * @return return string to log, future iterations could return result object with result text and status etc
      */
-    public void processCommand(Command command) {
-        if (command.equals(Command.CLOSE)) {
-            // doing an exit here makes this hard to test.
-            System.exit(0);
-        } else if (command.equals(Command.LIST_COMMANDS)) {
-            String listOfCommands = String.join(", ", getListOfCommandValues());
-            logger.info(() -> "Here is a list of valid commands: " + listOfCommands);
+    public String processCommand(Command command) {
+        switch (command) {
+            case CLOSE:
+                System.exit(0);
+                return "";
+            case LIST_COMMANDS:
+                String listOfCommands = String.join(", ", getListOfCommandValues());
+                return "Here is a list of valid commands: " + listOfCommands;
+            case LIST_PRODUCTS:
+                return processListProducts();
+            default:
+                return "";
         }
+    }
+
+    private String processListProducts() {
+        List<Product> products = shopService.getProducts();
+        StringBuilder builder = new StringBuilder();
+
+        if (products.isEmpty()) {
+            builder.append("There are no products currently in the shop");
+        } else {
+            builder.append("Please find the list of products below: \n");
+            products.forEach(product -> builder.append(product.toString()).append("\n"));
+        }
+
+        return builder.toString();
     }
 }

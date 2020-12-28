@@ -24,8 +24,7 @@ public class Runner {
                 LOGGER.info("Please input a command");
                 String input = scanner.nextLine();
 
-                //todo perhaps have this return a boolean that will tell us if we should continue processing rather than system exit lower down
-                commandService.processCommand(commandService.getCommand(input));
+                LOGGER.info(commandService.processCommand(commandService.getCommand(input)));
             } catch (InvalidCommandException e) {
                 //this is a catch for an invalid command being provided this will then continue the loop to ask for another command.
                 LOGGER.warning("The command you have provided is not valid. Please use the list_commands command" +
