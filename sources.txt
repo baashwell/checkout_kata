@@ -1,4 +1,8 @@
 src\main\java\uk\co\benashwell\checkout\kata\exception\InvalidCommandException.java
 src\main\java\uk\co\benashwell\checkout\kata\model\Command.java
+src\main\java\uk\co\benashwell\checkout\kata\model\Product.java
+src\main\java\uk\co\benashwell\checkout\kata\model\Shop.java
+src\main\java\uk\co\benashwell\checkout\kata\utils\FilesUtils.java
+src\main\java\uk\co\benashwell\checkout\kata\service\ShopService.java
 src\main\java\uk\co\benashwell\checkout\kata\service\CommandService.java
 src\main\java\uk\co\benashwell\checkout\kata\Runner.java

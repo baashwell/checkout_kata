@@ -5,6 +5,7 @@ but may be stripped out later if required.
 ## Running Information
 This project has been developed to run on Java 11, there is nothing that is specific to Java 11 in use currently but
 in order to use the current POM Compile plugin you will need to have Java 11 or later installed and in use.
+
 ### Instructions to run application
 In order to run the project on a windows environment please use the following commands to compile.
  This should all be done from the root folder (checkout_kata).
@@ -13,6 +14,12 @@ In order to run the project on a windows environment please use the following co
 javac -Xlint:unchecked -d "classes" @sources.txt
 java -classpath "classes" uk.co.benashwell.checkout.kata.Runner
 ```
+
+#### Editing the products in the shop
+Currently, the products in the shop are populated on start up from the default-products.txt file that
+ can be found in the classes directory. You can add/update this file ensuring you keep to the formatting:
+ - One product per line
+ - comma separate name of product and price - ProductA,1.99
 
 ### Instructions to run tests using maven
 In order to run the tests without having to bundle JUnit JARS within the project I have added a maven pom file that
@@ -27,14 +34,13 @@ mvn clean test
 Here is a list of the current commands that have been implemented:
 - close - This will close the application
 - list_commands - This will list the commands in the application
+- list_products - This will list the products currently in the application
 
 ## Task List
 Following is a list of high level tasks to carry out, each will need  unit testing, working code, 
 manual testing and relevant documentation.
 
-- Add Import of data from a file to populate map of supermarket items, this will be done from a static file on start up
-- Add 'List Items' command to allow users to show all items in supermarket
-- Add 'Add Item {id}' to allow users to add an item to their basket
+Add 'Add Item {id}' to allow users to add an item to their basket
 - Add 'Checkout' to allow users to calculate their basket, printing the total cost and clearing the basket
 - Add in special offers map from static file
 - Update checkout to consult this map in calculation
