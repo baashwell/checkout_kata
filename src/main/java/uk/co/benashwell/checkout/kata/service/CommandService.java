@@ -2,7 +2,7 @@ package uk.co.benashwell.checkout.kata.service;
 
 import java.util.Arrays;
 import java.util.List;
-import java.util.logging.Logger;
+import java.util.Map;
 import java.util.stream.Collectors;
 
 import uk.co.benashwell.checkout.kata.exception.InvalidCommandException;
@@ -55,9 +55,10 @@ public class CommandService {
     /**
      * Carry out a given command
      * @param command Command to carry out
+     * @param arguments any additional arguments found from user
      * @return return string to log, future iterations could return result object with result text and status etc
      */
-    public String processCommand(Command command) {
+    public String processCommand(Command command, List<String> arguments) {
         switch (command) {
             case CLOSE:
                 System.exit(0);
@@ -67,9 +68,60 @@ public class CommandService {
                 return "Here is a list of valid commands: " + listOfCommands;
             case LIST_PRODUCTS:
                 return processListProducts();
+            case ADD_PRODUCT_T0_CART:
+                return processAddProductToCart(arguments);
+            case LIST_CART:
+                return processListCart();
             default:
                 return "";
         }
+    }
+
+    private String processListCart() {
+        String result = "Your Cart is Empty";
+        Map<Product, Integer> cart = shopService.getCart();
+
+        if (!cart.isEmpty()) {
+            StringBuilder builder = new StringBuilder();
+
+            for (Map.Entry<Product, Integer> item : cart.entrySet()) {
+                builder.append(item.getValue()).append(" x ").append(item.getKey().getName()).append("\n");
+            }
+
+            result = builder.toString();
+        }
+
+        return result;
+    }
+
+    private String processAddProductToCart(List<String> arguments) {
+        String result = "No product was found in your command, please provide a product name to add to cart after the command" +
+                " in the following form - add_product_to_cart product_name quantity";
+
+        if(!arguments.isEmpty()) {
+            Product product = shopService.getProduct(arguments.get(0));
+
+            if(product == null) {
+                result = "The product you provide could not be found in the store, to get a list of products please use the list_products command.";
+            } else {
+                if (arguments.size() == 1) {
+                    result = addProductToCart(product, 1);
+                } else {
+                    try {
+                        result = addProductToCart(product, Integer.parseInt(arguments.get(1)));
+                    } catch (NumberFormatException e) {
+                        result = "You have provided a Quantity that is not recognised please use a number such as 5, adding it to the command in the following form - add_product_to_cart product_name quantity";
+                    }
+                }
+            }
+        }
+
+        return result;
+    }
+
+    private String addProductToCart(Product product, int quantity) {
+        shopService.addProductToCart(product, quantity);
+        return "We have added the following to your cart: " + quantity + " x " + product.getName();
     }
 
     private String processListProducts() {

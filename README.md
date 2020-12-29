@@ -20,6 +20,8 @@ Currently, the products in the shop are populated on start up from the default-p
  can be found in the classes directory. You can add/update this file ensuring you keep to the formatting:
  - One product per line
  - comma separate name of product and price - ProductA,1.99
+ - Products must not have spaces in the name as currently do not handle this when adding them to the cart.
+ - Cannot have duplicate product names currently either as we will just find the first one with that name.
 
 ### Instructions to run tests using maven
 In order to run the tests without having to bundle JUnit JARS within the project I have added a maven pom file that
@@ -35,14 +37,20 @@ Here is a list of the current commands that have been implemented:
 - close - This will close the application
 - list_commands - This will list the commands in the application
 - list_products - This will list the products currently in the application
+- add_product_to_cart {product name} {quantity} - This will add the given quantity of the product name to your cart. 
+If you do not provide a quantity it will default to 1.
+- list_cart - This will list the items currently in your cart
 
 ## Task List
 Following is a list of high level tasks to carry out, each will need  unit testing, working code, 
 manual testing and relevant documentation.
 
-Add 'Add Item {id}' to allow users to add an item to their basket
 - Add 'Checkout' to allow users to calculate their basket, printing the total cost and clearing the basket
 - Add in special offers map from static file
 - Update checkout to consult this map in calculation
 - Allow users to provide a file that will overwrite the current supermarket map
 - strip out the use of maven and include JUnit Jar and run instructions
+
+## Future Tasks
+- Currently, you cannot have spaces in products or duplicate product names due to how we add products to the cart, this can be solved in future 
+by adding an id that is used to add the product to cart - this is a much preferred method.

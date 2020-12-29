@@ -1,6 +1,8 @@
 package uk.co.benashwell.checkout.kata.service;
 
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 import java.util.logging.Logger;
 import java.util.stream.Collectors;
 
@@ -12,9 +14,15 @@ public class ShopService {
 
     private Shop shop;
     private Logger logger = Logger.getLogger(this.getClass().getName());
+    private Map<Product, Integer> cart = new HashMap<>();
 
     public ShopService(String productsFileName) {
         loadProductsIntoShop(productsFileName);
+    }
+
+    //this is used for testing only currently
+    public ShopService(List<Product> products) {
+        shop = new Shop(products);
     }
 
     //todo should this be split into another service?
@@ -58,5 +66,36 @@ public class ShopService {
      */
     public List<Product> getProducts() {
         return shop.getProducts();
+    }
+
+    /**
+     * Get a product with the given name
+     * @param productName Product name to look for
+     * @return Product with the given name or null if not found
+     */
+    public Product getProduct(String productName) {
+        return getProducts()
+                .stream()
+                .filter(product -> product.getName().equals(productName))
+                .findFirst()
+                .orElse(null);
+    }
+
+    /**
+     * Add the given Quantity of a product to the cart
+     * @param product Product to add to cart
+     * @param quantity amount to add to the cart
+     */
+    public void addProductToCart(Product product, int quantity) {
+        if (cart.containsKey(product)) {
+            Integer currentQuantity = cart.get(product);
+            cart.put(product, currentQuantity + quantity);
+        } else {
+            cart.put(product, quantity);
+        }
+    }
+
+    public Map<Product, Integer> getCart() {
+        return cart;
     }
 }

@@ -2,6 +2,7 @@ package uk.co.benashwell.checkout.kata.service;
 
 import static org.junit.jupiter.api.Assertions.*;
 
+import java.util.Collections;
 import java.util.List;
 
 import org.junit.jupiter.api.BeforeEach;
@@ -28,21 +29,62 @@ class ShopServiceTest {
         List<Product> products = shopService.getProducts();
         assertEquals(4, products.size());
 
-        Product productA = products.stream().filter(product -> product.getName().equals("Product A")).findFirst().get();
-        assertEquals("Product A", productA.getName());
+        Product productA = products.stream().filter(product -> product.getName().equals("ProductA")).findFirst().get();
+        assertEquals("ProductA", productA.getName());
         assertEquals(1.12D, productA.getValue());
 
-        Product productB = products.stream().filter(product -> product.getName().equals("Product B")).findFirst().get();
-        assertEquals("Product B", productB.getName());
+        Product productB = products.stream().filter(product -> product.getName().equals("ProductB")).findFirst().get();
+        assertEquals("ProductB", productB.getName());
         assertEquals(5.00D, productB.getValue());
 
-        Product productC = products.stream().filter(product -> product.getName().equals("Product C")).findFirst().get();
-        assertEquals("Product C", productC.getName());
+        Product productC = products.stream().filter(product -> product.getName().equals("ProductC")).findFirst().get();
+        assertEquals("ProductC", productC.getName());
         assertEquals(2.00D, productC.getValue());
 
-        Product productD = products.stream().filter(product -> product.getName().equals("Product D")).findFirst().get();
-        assertEquals("Product D", productD.getName());
+        Product productD = products.stream().filter(product -> product.getName().equals("ProductD")).findFirst().get();
+        assertEquals("ProductD", productD.getName());
         assertEquals(15.99D, productD.getValue());
     }
 
+    @Test
+    @DisplayName("Get Product when product not found returns null")
+    void getProductWhenNotInShop() {
+        shopService = new ShopService(Collections.emptyList());
+        assertNull(shopService.getProduct("NOT IN SHOP"));
+    }
+
+    @Test
+    @DisplayName("Get Product when product found returns the product")
+    void getProductWhenFound() {
+        Product product = new Product("ProductD", 15.99D);
+        shopService = new ShopService(Collections.singletonList(product));
+        assertEquals(product, shopService.getProduct("ProductD"));
+    }
+
+    @Test
+    @DisplayName("Add Product To Cart When Product Not Already In Cart Adds A New Entry To Cart")
+    void addProductToCartWhenNotInCart() {
+        Product product = new Product("ProductD", 15.99D);
+        shopService = new ShopService(Collections.singletonList(product));
+        shopService.addProductToCart(product, 1);
+        assertTrue(shopService.getCart().containsKey(product));
+        assertEquals(1, shopService.getCart().get(product));
+    }
+
+    @Test
+    @DisplayName("Add Product To Cart When Product is Already In Cart Adds the quantity To Cart")
+    void addProductToCartWhenAlreadyInCart() {
+        Product product = new Product("ProductD", 15.99D);
+        shopService = new ShopService(Collections.singletonList(product));
+
+        //initial add
+        shopService.addProductToCart(product, 1);
+        assertTrue(shopService.getCart().containsKey(product));
+        assertEquals(1, shopService.getCart().get(product));
+
+        //Second addition
+        shopService.addProductToCart(product, 3);
+        assertTrue(shopService.getCart().containsKey(product));
+        assertEquals(4, shopService.getCart().get(product));
+    }
 }
