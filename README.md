@@ -45,7 +45,6 @@ If you do not provide a quantity it will default to 1.
 Following is a list of high level tasks to carry out, each will need  unit testing, working code, 
 manual testing and relevant documentation.
 
-- Update checkout to consult this map in calculation
 - Allow users to provide a file that will overwrite the current supermarket map
 - strip out the use of maven and include JUnit Jar and run instructions
 
@@ -56,3 +55,4 @@ by adding an id that is used to add the product to cart - this is a much preferr
 - Move all messages out to a separate helper, allowing the command service to be used in commandline but also allowing for other interfaces
 - Make Special Offer an interface that will then allow different types of special offer to be created and processed
 - String helper that will do the strip trailing and leading and parse the value into a double/integer
+- Learn how to implement paramterized testing to reduce test methods for checkout

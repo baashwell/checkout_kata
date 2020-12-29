@@ -1,12 +1,12 @@
 package uk.co.benashwell.checkout.kata.service;
 
-import java.util.Collections;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.logging.Logger;
 import java.util.stream.Collectors;
 
+import uk.co.benashwell.checkout.kata.utils.MathHelper;
 import uk.co.benashwell.checkout.kata.model.Product;
 import uk.co.benashwell.checkout.kata.model.Shop;
 import uk.co.benashwell.checkout.kata.model.SpecialOffer;
@@ -26,8 +26,6 @@ public class ShopService {
     public ShopService(List<Product> products) {
         shop = new Shop(products);
     }
-
-    //todo should this be split into another service?
 
     /**
      * Load products into shop
@@ -127,7 +125,7 @@ public class ShopService {
 
         //calculate the total price of each item
         for (Map.Entry<Product, Integer> item : cart.entrySet()) {
-            total += item.getKey().getValue() * item.getValue();
+            total += MathHelper.getTotal(item.getValue(), item.getKey().getValue(), item.getKey().getSpecialOffer());
         }
 
         //reset the cart
