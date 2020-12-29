@@ -9,6 +9,7 @@ import java.util.stream.Collectors;
 
 import uk.co.benashwell.checkout.kata.model.Product;
 import uk.co.benashwell.checkout.kata.model.Shop;
+import uk.co.benashwell.checkout.kata.model.SpecialOffer;
 import uk.co.benashwell.checkout.kata.utils.FilesUtils;
 
 public class ShopService {
@@ -50,13 +51,34 @@ public class ShopService {
     }
 
     private Product getProductFromString(String productString) {
-        //require product to be formed of productname,1.10
+        //requires product to be formed of productname,1.10,3 for 2.00
         String[] product = productString.split(",");
 
-        if (product.length == 2) {
-            //todo check the parse
-            return new Product(product[0], Double.parseDouble(product[1]));
-        } else {
+        try {
+            if (product.length == 2) {
+                return new Product(product[0], Double.parseDouble(product[1]));
+            } else if (product.length == 3) {
+                return new Product(product[0], Double.parseDouble(product[1].stripLeading().stripTrailing()), getSpecialOfferFromString(product[2]));
+            } else {
+                return null;
+            }
+        } catch (NumberFormatException e) {
+            logger.warning("A Product had a price that could not be parsed, please check the input file.");
+            return null;
+        }
+    }
+
+    private SpecialOffer getSpecialOfferFromString(String specialOfferString) {
+        String[] specialOffer = specialOfferString.split(" for ");
+
+        try {
+            if (specialOffer.length == 2) {
+                return new SpecialOffer(Integer.parseInt(specialOffer[0].stripLeading().stripTrailing()), Double.parseDouble(specialOffer[1].stripLeading().stripTrailing()));
+            } else {
+                return null;
+            }
+        } catch (NumberFormatException e) {
+            logger.warning("A Product had a Special Offer that could not be parsed, please check the input file.");
             return null;
         }
     }

@@ -14,7 +14,7 @@ public class CommandService {
     private ShopService shopService;
 
     public CommandService() {
-        shopService = new ShopService("default-products.txt");
+        shopService = new ShopService("default-products-with-special-offers.txt");
     }
 
     //this constructor will be used for testing to mock the shop service

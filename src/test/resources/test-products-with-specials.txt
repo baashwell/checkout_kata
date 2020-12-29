@@ -1,0 +1,4 @@
+ProductA, 1.12
+ProductB, 5.00, 3 for 10
+ProductC, 2, 5 for 7.99
+ProductD, 15.99
