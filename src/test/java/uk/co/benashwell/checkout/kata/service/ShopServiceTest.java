@@ -2,8 +2,13 @@ package uk.co.benashwell.checkout.kata.service;
 
 import static org.junit.jupiter.api.Assertions.*;
 
+import java.util.AbstractMap;
+import java.util.Arrays;
 import java.util.Collections;
 import java.util.List;
+import java.util.Map;
+import java.util.stream.Collectors;
+import java.util.stream.Stream;
 
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
@@ -86,5 +91,52 @@ class ShopServiceTest {
         shopService.addProductToCart(product, 3);
         assertTrue(shopService.getCart().containsKey(product));
         assertEquals(4, shopService.getCart().get(product));
+    }
+
+    @Test
+    @DisplayName("Checkout with a singular item returns correct value")
+    void checkoutWithSingularItem() {
+        Product productA = new Product("ProductA", 2.00D);
+        shopService = new ShopService(Collections.singletonList(productA));
+
+        Map<Product, Integer> cartMap = Stream.of(
+                new AbstractMap.SimpleEntry<>(productA, 2))
+                .collect(Collectors.toMap(Map.Entry::getKey, Map.Entry::getValue));
+        shopService.setCart(cartMap);
+
+        assertEquals(4.0D, shopService.checkout());
+    }
+
+    @Test
+    @DisplayName("Checkout with a multiple items returns correct value")
+    void checkoutWithMultipleItems() {
+        Product productA = new Product("ProductA", 2.00D);
+        Product productB = new Product("ProductB", 3.00D);
+        shopService = new ShopService(Arrays.asList(productA, productB));
+
+        Map<Product, Integer> cartMap = Stream.of(
+                new AbstractMap.SimpleEntry<>(productA, 2),
+                new AbstractMap.SimpleEntry<>(productB, 5))
+                .collect(Collectors.toMap(Map.Entry::getKey, Map.Entry::getValue));
+        shopService.setCart(cartMap);
+
+        assertEquals(19.0D, shopService.checkout());
+    }
+
+    @Test
+    @DisplayName("Checkout with a clears the cart")
+    void checkoutClearsTheCart() {
+        Product productA = new Product("ProductA", 2.00D);
+        Product productB = new Product("ProductB", 3.00D);
+        shopService = new ShopService(Arrays.asList(productA, productB));
+
+        Map<Product, Integer> cartMap = Stream.of(
+                new AbstractMap.SimpleEntry<>(productA, 2),
+                new AbstractMap.SimpleEntry<>(productB, 5))
+                .collect(Collectors.toMap(Map.Entry::getKey, Map.Entry::getValue));
+        shopService.setCart(cartMap);
+
+        shopService.checkout();
+        assertTrue(shopService.getCart().isEmpty());
     }
 }

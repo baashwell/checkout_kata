@@ -40,12 +40,12 @@ Here is a list of the current commands that have been implemented:
 - add_product_to_cart {product name} {quantity} - This will add the given quantity of the product name to your cart. 
 If you do not provide a quantity it will default to 1.
 - list_cart - This will list the items currently in your cart
+- checkout - This will checkout your cart, removing all items and showing you the total cost of the cart
 
 ## Task List
 Following is a list of high level tasks to carry out, each will need  unit testing, working code, 
 manual testing and relevant documentation.
 
-- Add 'Checkout' to allow users to calculate their basket, printing the total cost and clearing the basket
 - Add in special offers map from static file
 - Update checkout to consult this map in calculation
 - Allow users to provide a file that will overwrite the current supermarket map
@@ -54,3 +54,5 @@ manual testing and relevant documentation.
 ## Future Tasks
 - Currently, you cannot have spaces in products or duplicate product names due to how we add products to the cart, this can be solved in future 
 by adding an id that is used to add the product to cart - this is a much preferred method.
+- Formatting of Double values to always be £x.xx 
+- Move all messages out to a seperate helper, allowing the command service to be used in commandline but also allowing for other interfaces

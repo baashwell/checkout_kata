@@ -1,5 +1,6 @@
 package uk.co.benashwell.checkout.kata.service;
 
+import java.util.Collections;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -95,7 +96,29 @@ public class ShopService {
         }
     }
 
+    /**
+     * Checkout the current cart
+     * @return The total amount of the current cart
+     */
+    public Double checkout() {
+        double total = 0D;
+
+        //calculate the total price of each item
+        for (Map.Entry<Product, Integer> item : cart.entrySet()) {
+            total += item.getKey().getValue() * item.getValue();
+        }
+
+        //reset the cart
+        cart = new HashMap<>();
+
+        return total;
+    }
+
     public Map<Product, Integer> getCart() {
         return cart;
+    }
+
+    public void setCart(Map<Product, Integer> cart) {
+        this.cart = cart;
     }
 }
