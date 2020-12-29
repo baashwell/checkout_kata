@@ -9,6 +9,8 @@ import java.util.stream.Collectors;
 import uk.co.benashwell.checkout.kata.exception.InvalidCommandException;
 import uk.co.benashwell.checkout.kata.model.Command;
 import uk.co.benashwell.checkout.kata.service.CommandService;
+import uk.co.benashwell.checkout.kata.service.ShopService;
+import uk.co.benashwell.checkout.kata.utils.ArgumentUtils;
 
 /**
  * Main Runner class that will continually loop and ask for commands from the user.
@@ -19,7 +21,8 @@ public class Runner {
 
     public static void main(String[] args) {
 
-        CommandService commandService = new CommandService();
+        ShopService shopService = new ShopService(ArgumentUtils.getPropertyValue(args, "default-products-with-special-offers.txt"));
+        CommandService commandService = new CommandService(shopService);
         Scanner scanner = new Scanner(System.in);
 
         //todo no tests for this loop as there is very little unit logic. Perhaps think about refactoring all other than the loop into a testable method

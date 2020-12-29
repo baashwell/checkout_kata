@@ -6,7 +6,9 @@ public enum Command {
     LIST_PRODUCTS("list_products"),
     ADD_PRODUCT_T0_CART("add_product_to_cart"),
     LIST_CART("list_cart"),
-    CHECKOUT("checkout");
+    CHECKOUT("checkout"),
+    CHANGE_PRODUCTS("change_products");
+
     final String commandToMatch;
 
     Command(String commandToMatch) {

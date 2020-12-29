@@ -254,4 +254,42 @@ class ShopServiceTest {
 
         assertEquals(10.0D, shopService.checkout());
     }
+
+    @Test
+    @DisplayName("Change Products List when cannot find file wipes the product list")
+    void changeProductsWithFileThatCantBeFound() {
+        Product productA = new Product("ProductA", 2.00D, new SpecialOffer(3, 5D));
+        Product productB = new Product("ProductB", 3.00D);
+        shopService = new ShopService(Arrays.asList(productA, productB));
+
+        shopService.changeProductsInShop("file does not exist");
+
+        assertTrue(shopService.getProducts().isEmpty());
+    }
+
+    @Test
+    @DisplayName("Change Products List when can find file changes products")
+    void changeProductsWithFileChangesProducts() {
+        Product productA = new Product("ProductA", 2.00D, new SpecialOffer(3, 5D));
+        Product productB = new Product("ProductB", 3.00D);
+        shopService = new ShopService(Arrays.asList(productA, productB));
+
+        shopService.changeProductsInShop("test-products.txt");
+
+        List<Product> products = shopService.getProducts();
+        assertEquals(4, products.size());
+
+    }
+
+    @Test
+    @DisplayName("Change Products List wipes the current cart")
+    void changeProductsWipesCurrentCart() {
+        Product productA = new Product("ProductA", 2.00D, new SpecialOffer(3, 5D));
+        Product productB = new Product("ProductB", 3.00D);
+        shopService = new ShopService(Arrays.asList(productA, productB));
+
+        shopService.changeProductsInShop("test-products.txt");
+
+        assertTrue(shopService.getCart().isEmpty());
+    }
 }

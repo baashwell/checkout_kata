@@ -134,6 +134,17 @@ public class ShopService {
         return total;
     }
 
+    /**
+     * Change the products that are currently in use in the store
+     * This will clear the current cart as they may not be in the new products list
+     * @param filename File to populate the products with
+     */
+    public void changeProductsInShop(String filename) {
+        loadProductsIntoShop(filename);
+        //reset the cart
+        cart = new HashMap<>();
+    }
+
     public Map<Product, Integer> getCart() {
         return cart;
     }

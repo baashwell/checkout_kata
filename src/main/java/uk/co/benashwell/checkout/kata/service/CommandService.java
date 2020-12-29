@@ -13,10 +13,6 @@ public class CommandService {
 
     private ShopService shopService;
 
-    public CommandService() {
-        shopService = new ShopService("default-products-with-special-offers.txt");
-    }
-
     //this constructor will be used for testing to mock the shop service
     public CommandService(ShopService shopService) {
         this.shopService = shopService;
@@ -74,9 +70,21 @@ public class CommandService {
                 return processListCart();
             case CHECKOUT:
                 return processCheckout();
+            case CHANGE_PRODUCTS:
+                return processChangeProducts(arguments);
             default:
                 return "";
         }
+    }
+
+    private String processChangeProducts(List<String> arguments) {
+        String result = "Cannot change products without a filename being provided, please try again using the command as follows - change_products filename.txt";
+
+        if(!arguments.isEmpty()) {
+            shopService.changeProductsInShop(arguments.get(0));
+            result = "Products have been changed, please use the list_products command to see your updated product list.";
+        }
+        return result;
     }
 
     private String processCheckout() {
