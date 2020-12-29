@@ -1,6 +1,9 @@
 package uk.co.benashwell.checkout.kata.service;
 
-import static org.junit.jupiter.api.Assertions.*;
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertNotNull;
+import static org.junit.jupiter.api.Assertions.assertNull;
+import static org.junit.jupiter.api.Assertions.assertTrue;
 
 import java.util.AbstractMap;
 import java.util.Arrays;
@@ -10,7 +13,6 @@ import java.util.Map;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
-import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 
@@ -49,6 +51,38 @@ class ShopServiceTest {
         Product productD = products.stream().filter(product -> product.getName().equals("ProductD")).findFirst().get();
         assertEquals("ProductD", productD.getName());
         assertEquals(15.99D, productD.getValue());
+    }
+
+    @Test
+    @DisplayName("Create Shop with a test file that has Special Offers")
+    void createShopWithTestFileWithSpecialOffers() {
+        shopService = new ShopService("test-products-with-specials.txt");
+        List<Product> products = shopService.getProducts();
+        assertEquals(4, products.size());
+
+        Product productA = products.stream().filter(product -> product.getName().equals("ProductA")).findFirst().get();
+        assertEquals("ProductA", productA.getName());
+        assertEquals(1.12D, productA.getValue());
+        assertNull(productA.getSpecialOffer());
+
+        Product productB = products.stream().filter(product -> product.getName().equals("ProductB")).findFirst().get();
+        assertEquals("ProductB", productB.getName());
+        assertEquals(5.00D, productB.getValue());
+        assertNotNull(productB.getSpecialOffer());
+        assertEquals(3, productB.getSpecialOffer().getAmountOfItems());
+        assertEquals(10D, productB.getSpecialOffer().getCostForAmount());
+
+        Product productC = products.stream().filter(product -> product.getName().equals("ProductC")).findFirst().get();
+        assertEquals("ProductC", productC.getName());
+        assertEquals(2.00D, productC.getValue());
+        assertNotNull(productC.getSpecialOffer());
+        assertEquals(5, productC.getSpecialOffer().getAmountOfItems());
+        assertEquals(7.99D, productC.getSpecialOffer().getCostForAmount());
+
+        Product productD = products.stream().filter(product -> product.getName().equals("ProductD")).findFirst().get();
+        assertEquals("ProductD", productD.getName());
+        assertEquals(15.99D, productD.getValue());
+        assertNull(productD.getSpecialOffer());
     }
 
     @Test
