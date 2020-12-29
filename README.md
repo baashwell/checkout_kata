@@ -15,12 +15,19 @@ java -classpath "classes" uk.co.benashwell.checkout.kata.Runner
 ```
 
 #### Editing the products in the shop
-Currently, the products in the shop are populated on start up from the default-products.txt file that
+Currently, the products in the shop are populated on start up from the default-products-with-special-offers.txt file that
  can be found in the classes directory. You can add/update this file ensuring you keep to the formatting:
  - One product per line
  - comma separate name of product and price and if present special offer - ProductA,1.99,2 for 3.00
  - Products must not have spaces in the name as currently do not handle this when adding them to the cart.
  - Cannot have duplicate product names currently either as we will just find the first one with that name.
+ 
+ If you add a new products file to the classes directory you can tell the application t use this file on start up by providing 
+ a runtime argument with the file name as follows:
+ 
+ ```
+java -classpath "classes" uk.co.benashwell.checkout.kata.Runner your-file-name-here.txt
+```
 
 ### Instructions to run tests using maven
 In order to run the tests without having to bundle JUnit JARS within the project I have added a maven pom file that
@@ -40,13 +47,9 @@ Here is a list of the current commands that have been implemented:
 If you do not provide a quantity it will default to 1.
 - list_cart - This will list the items currently in your cart
 - checkout - This will checkout your cart, removing all items and showing you the total cost of the cart
-
-## Task List
-Following is a list of high level tasks to carry out, each will need  unit testing, working code, 
-manual testing and relevant documentation.
-
-- Allow users to provide a file that will overwrite the current supermarket map
-- strip out the use of maven and include JUnit Jar and run instructions
+- change_products {product file name} - This will change the products file in use for the current shop to the one provided.
+If that file cannot be found it will clear the current product list. In order to change products to a different file please add
+the file to the classes directory. This will also clear down the current cart as the products may not be in  the new product list.
 
 ## Future Tasks
 - Currently, you cannot have spaces in products or duplicate product names due to how we add products to the cart, this can be solved in future 
@@ -56,3 +59,5 @@ by adding an id that is used to add the product to cart - this is a much preferr
 - Make Special Offer an interface that will then allow different types of special offer to be created and processed
 - String helper that will do the strip trailing and leading and parse the value into a double/integer
 - Learn how to implement paramterized testing to reduce test methods for checkout
+- stop working from README and make a TRELLO Board
+- strip out the use of maven and include JUnit Jar etc and run instructions - this was in initial scope but due to time constraints will not be carrying out

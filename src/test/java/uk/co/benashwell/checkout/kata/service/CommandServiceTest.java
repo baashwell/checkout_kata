@@ -60,6 +60,8 @@ class CommandServiceTest {
         assertEquals(Command.LIST_PRODUCTS, commandService.getCommand("list_products"));
         assertEquals(Command.ADD_PRODUCT_T0_CART, commandService.getCommand("add_product_to_cart"));
         assertEquals(Command.LIST_CART, commandService.getCommand("list_cart"));
+        assertEquals(Command.CHECKOUT, commandService.getCommand("checkout"));
+        assertEquals(Command.CHANGE_PRODUCTS, commandService.getCommand("change_products"));
     }
 
     @Test
@@ -71,6 +73,8 @@ class CommandServiceTest {
         assertTrue(result.contains("list_products"));
         assertTrue(result.contains("add_product_to_cart"));
         assertTrue(result.contains("list_cart"));
+        assertTrue(result.contains("checkout"));
+        assertTrue(result.contains("change_products"));
     }
 
     @Test
@@ -175,6 +179,20 @@ class CommandServiceTest {
         when(shopService.getCart()).thenReturn(cartMap);
         when(shopService.checkout()).thenReturn(4.00D);
         assertEquals("Checkout successful, the total cost of your cart was 4.0", commandService.processCommand(Command.CHECKOUT, Collections.emptyList()));
+    }
+
+    @Test
+    @DisplayName("Process the change products command With no filename gives relevant response")
+    void processChangeWithNoFileName() {
+        assertEquals("Cannot change products without a filename being provided, please try again using the command as follows - change_products filename.txt",
+                commandService.processCommand(Command.CHANGE_PRODUCTS, Collections.emptyList()));
+    }
+
+    @Test
+    @DisplayName("Process the change products command with filename gives relevant response")
+    void processChangeWithFileName() {
+        assertEquals("Products have been changed, please use the list_products command to see your updated product list.",
+                commandService.processCommand(Command.CHANGE_PRODUCTS, Collections.singletonList("new-file.txt")));
     }
 
 }
