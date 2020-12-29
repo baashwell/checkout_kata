@@ -17,6 +17,7 @@ import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 
 import uk.co.benashwell.checkout.kata.model.Product;
+import uk.co.benashwell.checkout.kata.model.SpecialOffer;
 
 class ShopServiceTest {
 
@@ -172,5 +173,85 @@ class ShopServiceTest {
 
         shopService.checkout();
         assertTrue(shopService.getCart().isEmpty());
+    }
+
+    @Test
+    @DisplayName("Checkout with an incomplete offer does not apply the offer")
+    void checkoutWithIncompleteOffer() {
+        Product productA = new Product("ProductA", 2.00D, new SpecialOffer(3, 5D));
+        Product productB = new Product("ProductB", 3.00D);
+        shopService = new ShopService(Arrays.asList(productA, productB));
+
+        Map<Product, Integer> cartMap = Stream.of(
+                new AbstractMap.SimpleEntry<>(productA, 2),
+                new AbstractMap.SimpleEntry<>(productB, 5))
+                .collect(Collectors.toMap(Map.Entry::getKey, Map.Entry::getValue));
+        shopService.setCart(cartMap);
+
+        assertEquals(19.0D, shopService.checkout());
+    }
+
+    @Test
+    @DisplayName("Checkout with a complete offer applys the offer")
+    void checkoutWithCompleteOffer() {
+        Product productA = new Product("ProductA", 2.00D, new SpecialOffer(3, 5D));
+        Product productB = new Product("ProductB", 3.00D);
+        shopService = new ShopService(Arrays.asList(productA, productB));
+
+        Map<Product, Integer> cartMap = Stream.of(
+                new AbstractMap.SimpleEntry<>(productA, 3),
+                new AbstractMap.SimpleEntry<>(productB, 5))
+                .collect(Collectors.toMap(Map.Entry::getKey, Map.Entry::getValue));
+        shopService.setCart(cartMap);
+
+        assertEquals(20.0D, shopService.checkout());
+    }
+
+    @Test
+    @DisplayName("Checkout with multiple complete offers applys multiple offers")
+    void checkoutWithMultipleOffers() {
+        Product productA = new Product("ProductA", 2.00D, new SpecialOffer(3, 5D));
+        Product productB = new Product("ProductB", 3.00D, new SpecialOffer(5, 12D));
+        shopService = new ShopService(Arrays.asList(productA, productB));
+
+        Map<Product, Integer> cartMap = Stream.of(
+                new AbstractMap.SimpleEntry<>(productA, 3),
+                new AbstractMap.SimpleEntry<>(productB, 5))
+                .collect(Collectors.toMap(Map.Entry::getKey, Map.Entry::getValue));
+        shopService.setCart(cartMap);
+
+        assertEquals(17.0D, shopService.checkout());
+    }
+
+    @Test
+    @DisplayName("Checkout with multiple of the same offers applies the offer multiple times")
+    void checkoutWithMultipleOfTheSameOffer() {
+        Product productA = new Product("ProductA", 2.00D, new SpecialOffer(3, 5D));
+        Product productB = new Product("ProductB", 3.00D);
+        shopService = new ShopService(Arrays.asList(productA, productB));
+
+        Map<Product, Integer> cartMap = Stream.of(
+                new AbstractMap.SimpleEntry<>(productA, 6),
+                new AbstractMap.SimpleEntry<>(productB, 2))
+                .collect(Collectors.toMap(Map.Entry::getKey, Map.Entry::getValue));
+        shopService.setCart(cartMap);
+
+        assertEquals(16.0D, shopService.checkout());
+    }
+
+    @Test
+    @DisplayName("Checkout with more than the required amount for the offer applies the offer")
+    void checkoutWithOverTheOfferAmount() {
+        Product productA = new Product("ProductA", 2.00D, new SpecialOffer(3, 5D));
+        Product productB = new Product("ProductB", 3.00D);
+        shopService = new ShopService(Arrays.asList(productA, productB));
+
+        Map<Product, Integer> cartMap = Stream.of(
+                new AbstractMap.SimpleEntry<>(productA, 4),
+                new AbstractMap.SimpleEntry<>(productB, 1))
+                .collect(Collectors.toMap(Map.Entry::getKey, Map.Entry::getValue));
+        shopService.setCart(cartMap);
+
+        assertEquals(10.0D, shopService.checkout());
     }
 }

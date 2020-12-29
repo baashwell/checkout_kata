@@ -45,7 +45,6 @@ If you do not provide a quantity it will default to 1.
 Following is a list of high level tasks to carry out, each will need  unit testing, working code, 
 manual testing and relevant documentation.
 
-- Update checkout to consult this map in calculation
 - Allow users to provide a file that will overwrite the current supermarket map
 - strip out the use of maven and include JUnit Jar and run instructions
 
