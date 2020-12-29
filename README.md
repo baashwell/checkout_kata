@@ -55,3 +55,4 @@ by adding an id that is used to add the product to cart - this is a much preferr
 - Move all messages out to a separate helper, allowing the command service to be used in commandline but also allowing for other interfaces
 - Make Special Offer an interface that will then allow different types of special offer to be created and processed
 - String helper that will do the strip trailing and leading and parse the value into a double/integer
+- Learn how to implement paramterized testing to reduce test methods for checkout
