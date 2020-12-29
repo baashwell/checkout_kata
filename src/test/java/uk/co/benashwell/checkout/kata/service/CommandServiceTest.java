@@ -158,4 +158,23 @@ class CommandServiceTest {
         assertTrue(commandService.processCommand(Command.LIST_CART, Collections.emptyList()).contains("5 x ProductB"));
     }
 
+    @Test
+    @DisplayName("Process the checkout command when there is nothing in cart")
+    void processCheckoutWithEmptyCart(){
+        when(shopService.getCart()).thenReturn(Collections.emptyMap());
+        assertEquals("You have no Items in your cart to checkout.", commandService.processCommand(Command.CHECKOUT, Collections.emptyList()));
+    }
+
+    @Test
+    @DisplayName("Process the checkout command when there are items in cart")
+    void processCheckout(){
+        Product productA = new Product("ProductA", 2.00D);
+        Map<Product, Integer> cartMap = Stream.of(
+                new AbstractMap.SimpleEntry<>(productA, 2))
+                .collect(Collectors.toMap(Map.Entry::getKey, Map.Entry::getValue));
+        when(shopService.getCart()).thenReturn(cartMap);
+        when(shopService.checkout()).thenReturn(4.00D);
+        assertEquals("Checkout successful, the total cost of your cart was 4.0", commandService.processCommand(Command.CHECKOUT, Collections.emptyList()));
+    }
+
 }

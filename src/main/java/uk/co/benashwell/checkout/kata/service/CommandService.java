@@ -72,9 +72,22 @@ public class CommandService {
                 return processAddProductToCart(arguments);
             case LIST_CART:
                 return processListCart();
+            case CHECKOUT:
+                return processCheckout();
             default:
                 return "";
         }
+    }
+
+    private String processCheckout() {
+        String result = "You have no Items in your cart to checkout.";
+        Map<Product, Integer> cart = shopService.getCart();
+
+        if (!cart.isEmpty()) {
+            result = "Checkout successful, the total cost of your cart was " + shopService.checkout();
+        }
+
+        return result;
     }
 
     private String processListCart() {
