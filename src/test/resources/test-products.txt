@@ -1,4 +1,4 @@
-Product A, 1.12
-Product B, 5.00
-Product C, 2
-Product D, 15.99
+ProductA, 1.12
+ProductB, 5.00
+ProductC, 2
+ProductD, 15.99
